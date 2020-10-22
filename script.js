@@ -6,12 +6,16 @@ const form = document.querySelector('#form');
 const inputTransactionName = document.querySelector('#text');
 const inputTransactionAmount = document.querySelector('#amount')
 
-const dummyTransactions = [
-  {id: 1, name: 'Bolo de brigadeiro', amount: -20},
-  {id: 2, name: 'Salario', amount: 300},
-  {id: 3, name: 'Torta de frango', amount: -10},
-  {id: 4, name: 'Violão', amount: 150}
-]
+const localStorageTransactions = JSON.parse(localStorage
+  .getItem('transactions'))
+let transactions = localStorage
+  .getItem('transactions') !== null ? localStorageTransactions : []
+
+const removeTransaction = id => {
+  transactions = transactions.
+    filter(transaction => transaction.id !== id)
+  init()
+}
 
 const addTransactionIntoDOM = transaction => {
   const operator = transaction.amount < 0 ? '-' : '+';
@@ -20,7 +24,10 @@ const addTransactionIntoDOM = transaction => {
   const li = document.createElement('li')
   li.classList.add(CSSClass)
   li.innerHTML = `
-    ${transaction.name} <span>${operator}R$${amountWithoutOperator}</span><button class="delete-btn">x</button>
+    ${transaction.name} <span>${operator}R$${amountWithoutOperator}</span>
+    <button class="delete-btn" onClick="removeTransaction(${transaction.id})">
+      x
+    </button>
   `
   // append adiciona um node no fim da lista
   // prepend adiciona um node no inicio da lista
@@ -28,7 +35,7 @@ const addTransactionIntoDOM = transaction => {
 }
 
 const updateBalance = () => {  
-  const transactionsAmounts = dummyTransactions
+  const transactionsAmounts = transactions
     .map(transaction => transaction.amount);
   // Usa-se o reduce para "reduzir" um array em um determinado valor.
   const total = transactionsAmounts
@@ -50,11 +57,15 @@ const updateBalance = () => {
 
 const init = () => {
   transactionsUl.innerHTML = '';
-  dummyTransactions.forEach(addTransactionIntoDOM);
+  transactions.forEach(addTransactionIntoDOM);
   updateBalance();
 }
 
 init(); 
+
+const updateLocalStorage = () => {
+  
+}
 
 const generateID = () => Math.round(Math.random() * 1000)
 
@@ -78,7 +89,7 @@ form.addEventListener('submit', event => {
     amount: Number(transactionAmount)
   }
 
-  dummyTransactions.push(transaction)
+  transactions.push(transaction)
   init()
 
   inputTransactionName.value = '';
