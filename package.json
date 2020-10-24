@@ -1,0 +1,14 @@
+{
+  "name": "controle-despesas",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": "https://github.com/paoru5444/controle-despesas.git",
+  "author": "Paulo Roberto <paulo.pereira.dev@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^26.6.1"
+  }
+}
